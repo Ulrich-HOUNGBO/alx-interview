@@ -6,6 +6,9 @@ Rotate 2D Matrix
 
 
 def rotate(matrix):
+    """
+    Rotate 2D Matrix
+    """
     if not len(matrix) or len(matrix) != len(matrix[0]):
         return matrix
     n = len(matrix)
