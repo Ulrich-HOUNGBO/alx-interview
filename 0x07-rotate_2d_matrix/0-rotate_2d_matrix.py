@@ -1,17 +1,13 @@
-#!/usr/bin/env python3
-
-"""
-Rotate 2D Matrix
+#!/usr/bin/python3
+""" 0-rotate_2d_matrix
 """
 
 
-def rotate(matrix):
-    """
-    Rotate 2D Matrix
+def rotate_2d_matrix(matrix):
+    """ Rotate 2d matrix 90 deg.
     """
     if not len(matrix) or len(matrix) != len(matrix[0]):
-        return matrix
-    n = len(matrix)
+        return
     n = len(matrix)
     for layer in range(n // 2):
         first, last, offset = layer, n - 1 - layer, 0
