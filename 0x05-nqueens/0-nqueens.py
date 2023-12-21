@@ -1,71 +1,62 @@
 #!/usr/bin/python3
-"""
-Script that solves the N queens problem based on the general Backtracking
-algorithm.
-
-This is:
-procedure bt(c) is
-    if reject(P, c) then return
-    if accept(P, c) then output(P, c)
-    s  first(P, c)
-    while s  NULL do
-        bt(s)
-        s  next(P, s)
-"""
 import sys
 
 
-def valid_pos(solution, pos):
-    """
-    Function that verifies if the position is valid
-    """
-    for queen in solution:
-        if queen[1] == pos[1]:
-            return False
-        if (queen[0] + queen[1]) == (pos[0] + pos[1]):
-            return False
-        if (queen[0] - queen[1]) == (pos[0] - pos[1]):
-            return False
-    return True
-
-
-def solve_queens(row, n, solution):
-    """
-    Function that finds the solution recursively, from the root down
-    """
-    if (row == n):
-        print(solution)
-    else:
-        for col in range(n):
-            pos = [row, col]
-            if valid_pos(solution, pos):
-                solution.append(pos)
-                solve_queens(row + 1, n, solution)
-                solution.remove(pos)
-
-
-def main(n):
-    """
-    Main function
-    """
-    solution = []
-    """ From root(0) down(n) """
-    solve_queens(0, n, solution)
-
 if __name__ == '__main__':
-    """ Validate the arguments from OS """
-    if len(sys.argv) != 2:
-        print('Usage: nqueens N')
-        sys.exit(1)
-    try:
-        i = int(sys.argv[1])
-    except BaseException:
-        print('N must be a number')
-        sys.exit(1)
-    i = int(sys.argv[1])
-    if i < 4:
-        print('N must be at least 4')
-        sys.exit(1)
+    if len(sys.argv) > 1:
+        try:
+            # number of queens we are solving for
+            board_size = int(sys.argv[1])
+        except Exception:
+            print("N must be a number")
+            exit(1)
+        if board_size < 4:
+            print("N must be at least 4")
+            exit(1)
 
-    """ Calling the main function """
-    main(i)
+        # will hold current testing data
+        currentSolution = [0 for x in range(board_size)]
+
+        # found solutions
+        solutions = []
+
+        def isSafe(testRow, testCol):
+            # no need to check for row 0
+            if testRow == 0:
+                return True
+
+            for row in range(0, testRow):
+
+                # check vertical
+                if testCol == currentSolution[row]:
+                    return False
+
+                # diagonal
+                if abs(testRow - row) == abs(testCol - currentSolution[row]):
+                    return False
+
+            # no attack found
+            return True
+
+        def placeQueen(row):
+            global currentSolution, solutions, board_size
+            for col in range(board_size):
+                if not isSafe(row, col):
+                    continue
+                else:
+                    currentSolution[row] = col
+                    if row == (board_size - 1):
+                        #  last row
+                        solution = []
+                        for i in range(len(currentSolution)):
+                            solution.append([i, currentSolution[i]])
+                        solutions.append(solution)
+                    else:
+                        placeQueen(row + 1)
+
+        placeQueen(0)
+        for solution in solutions:
+            print(solution)
+    else:
+        print("Usage: nqueens N")
+        exit(1)
