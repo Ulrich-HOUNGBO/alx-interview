@@ -1,66 +1,71 @@
 #!/usr/bin/python3
-""" This is a module for N queens NP problem.
 """
+Script that solves the N queens problem based on the general Backtracking
+algorithm.
+
+This is:
+procedure bt(c) is
+    if reject(P, c) then return
+    if accept(P, c) then output(P, c)
+    s  first(P, c)
+    while s  NULL do
+        bt(s)
+        s  next(P, s)
+"""
+import sys
+
+
+def valid_pos(solution, pos):
+    """
+    Function that verifies if the position is valid
+    """
+    for queen in solution:
+        if queen[1] == pos[1]:
+            return False
+        if (queen[0] + queen[1]) == (pos[0] + pos[1]):
+            return False
+        if (queen[0] - queen[1]) == (pos[0] - pos[1]):
+            return False
+    return True
+
+
+def solve_queens(row, n, solution):
+    """
+    Function that finds the solution recursively, from the root down
+    """
+    if (row == n):
+        print(solution)
+    else:
+        for col in range(n):
+            pos = [row, col]
+            if valid_pos(solution, pos):
+                solution.append(pos)
+                solve_queens(row + 1, n, solution)
+                solution.remove(pos)
+
+
+def main(n):
+    """
+    Main function
+    """
+    solution = []
+    """ From root(0) down(n) """
+    solve_queens(0, n, solution)
 
 if __name__ == '__main__':
-
-    import sys
-
+    """ Validate the arguments from OS """
     if len(sys.argv) != 2:
-        print("Usage: nqueens N")
+        print('Usage: nqueens N')
         sys.exit(1)
     try:
-        size = int(sys.argv[1])
+        i = int(sys.argv[1])
     except BaseException:
-        print("N must be a number")
+        print('N must be a number')
         sys.exit(1)
-    if size < 4:
-        print("N must be at least 4")
+    i = int(sys.argv[1])
+    if i < 4:
+        print('N must be at least 4')
         sys.exit(1)
 
-    def startSolve():
-        b = [[0 for j in range(size)] for i in range(size)]
-        checkRecursive(b, 0)
-        return
-
-    def checkRecursive(b, c):
-        if (c == size):
-            solution(b)
-            return True
-        ret = False
-        for i in range(size):
-            if (checkPosition(b, i, c)):
-                b[i][c] = 1
-                ret = checkRecursive(b, c + 1) or ret
-                b[i][c] = 0
-        return ret
-
-    def checkPosition(b, r, c):
-        for i in range(c):
-            if (b[r][i]):
-                return False
-        i = r
-        j = c
-        while i >= 0 and j >= 0:
-            if(b[i][j]):
-                return False
-            i = i - 1
-            j = j - 1
-        i = r
-        j = c
-        while j >= 0 and i < size:
-            if(b[i][j]):
-                return False
-            i = i + 1
-            j = j - 1
-        return True
-
-    def solution(b):
-        solve = []
-        for i in range(size):
-            for j in range(size):
-                if(b[i][j] is 1):
-                    solve.append([i, j])
-        print(solve)
-        solve.clear()
-    startSolve()
+    """ Calling the main function """
+    main(i)
